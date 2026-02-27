@@ -3,20 +3,43 @@ using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using System.Threading.Channels;
+
 
 namespace CalculadoraIMC.Services
 {
+
+    public enum CategoriaImc
+    {
+        AbaixoDoPeso,
+        PesoNormal,
+        Sobrepeso,
+        ObesidadeGrau1,
+        ObesidadeGrau2,
+        ObesidadeGrau3
+    }
     public class CalculadoraImc
     {
-       
+        public double CalcularImc(Pessoa pessoa)
+        {
+            // Convertendo altura de cm para metros
+            double alturaEmMetros = pessoa.Altura / 100;
+            // Fórmula do IMC: peso / (altura^2)
+            double imc = pessoa.Peso / (alturaEmMetros * alturaEmMetros); 
+            return Math.Round(imc, 2);
+        }
 
-        // PSEUDOCODE / PLAN:
-        // 1. Fix constructor names to match the containing class `CalculadoraImc` (was incorrectly `Pessoa`).
-        // 2. Add a parameterless constructor that initializes the non-nullable `Nome` to an empty string to satisfy CS8618.
-        // 3. Keep a parameterized constructor to initialize all properties from provided arguments.
-        // 4. Remove the pointless creation of a `Pessoa` instance inside the constructor.
-        // 5. Ensure no new compiler errors are introduced.
-
-        
+        public CategoriaImc ObterCategoria(double imc)
+        {
+            return imc switch
+            {
+                < 18.5 => CategoriaImc.AbaixoDoPeso,
+                >= 18.5 and < 25 => CategoriaImc.PesoNormal,
+                >= 25 and < 30 => CategoriaImc.Sobrepeso,
+                >= 30 and < 35 => CategoriaImc.ObesidadeGrau1,
+                >= 35 and < 40 => CategoriaImc.ObesidadeGrau2,
+                _ => CategoriaImc.ObesidadeGrau3
+            };
+        }
     }
 }
