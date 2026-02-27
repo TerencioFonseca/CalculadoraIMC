@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CalculadoraIMC.Models
 {
-    internal class Pessoa
+    public class Pessoa
     {
     }
 }
